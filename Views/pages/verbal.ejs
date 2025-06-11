@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verbal Ability Test</title>
+  <link rel="stylesheet" href="/styles/verbal.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <img src="/images/logo.png" alt="Logo" class="logo" />
+      <h1>Verbal Ability Test</h1>
+      <a href="/home" class="back-home">← Back to Home</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="question-card">
+      <h2>Question 1</h2>
+      <p class="question-text">
+        Choose the word that is most nearly similar in meaning to “Ubiquitous”:
+      </p>
+      <form action="/test/verbal" method="POST">
+        
+        <div class="options">
+          <label><input type="radio" name="answer" value="Rare" required /> Rare</label>
+          <label><input type="radio" name="answer" value="Omnipresent" /> Omnipresent</label>
+          <label><input type="radio" name="answer" value="Exclusive" /> Exclusive</label>
+          <label><input type="radio" name="answer" value="Infrequent" /> Infrequent</label>
+        </div>
+        <button type="submit" class="next-btn">Next Question</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 AptitudePro. All rights reserved.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= category %> Test - AptitudePro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .question-container {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .options-container {
+            margin-left: 20px;
+        }
+        .option-label {
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .option-label:hover {
+            background-color: #e9ecef;
+        }
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: #e9ecef;
+            z-index: 1000;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #007bff;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><%= category %> Test</h1>
+            <div>
+                <span class="badge bg-primary" id="questionCounter">Question 1 of <%= questions.length %></span>
+            </div>
+        </div>
+
+        <form id="quizForm" action="/submit-test" method="POST">
+            <input type="hidden" name="category" value="<%= category.toLowerCase() %>">
+            
+            <% questions.forEach((q, index) => { %>
+                <div class="question-container" id="question-<%= index + 1 %>" style="display: <%= index === 0 ? 'block' : 'none' %>">
+                    <h4 class="mb-3">Question <%= index + 1 %></h4>
+                    <p class="mb-4"><%= q.question %></p>
+                    
+                    <div class="options-container">
+                        <label class="option-label">
+                            <input type="radio" name="q<%= q.id %>" value="A" required>
+                            <%= q.option_a %>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="q<%= q.id %>" value="B">
+                            <%= q.option_b %>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="q<%= q.id %>" value="C">
+                            <%= q.option_c %>
+                        </label>
+                        <label class="option-label">
+                            <input type="radio" name="q<%= q.id %>" value="D">
+                            <%= q.option_d %>
+                        </label>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <% if (index > 0) { %>
+                            <button type="button" class="btn btn-secondary" onclick="showQuestion(<%= index %>)">Previous</button>
+                        <% } else { %>
+                            <div></div>
+                        <% } %>
+                        
+                        <% if (index < questions.length - 1) { %>
+                            <button type="button" class="btn btn-primary" onclick="showQuestion(<%= index + 2 %>)">Next</button>
+                        <% } else { %>
+                            <button type="submit" class="btn btn-success">Submit Test</button>
+                        <% } %>
+                    </div>
+                </div>
+            <% }) %>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Progress bar
+        function updateProgress(currentQuestion) {
+            const progress = (currentQuestion / <%= questions.length %>) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('questionCounter').textContent = `Question ${currentQuestion} of <%= questions.length %>`;
+        }
+
+        // Show specific question
+        function showQuestion(questionNumber) {
+            // Hide all questions
+            document.querySelectorAll('.question-container').forEach(q => q.style.display = 'none');
+            // Show selected question
+            document.getElementById(`question-${questionNumber}`).style.display = 'block';
+            // Update progress
+            updateProgress(questionNumber);
+        }
+
+        // Form submission handling
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Check if all questions are answered
+            const unanswered = document.querySelectorAll('input[type="radio"]:checked').length;
+            if (unanswered < <%= questions.length %>) {
+                if (!confirm('You have unanswered questions. Are you sure you want to submit?')) {
+                    return;
+                }
+            }
+            this.submit();
+        });
+
+        // Initialize progress
+        updateProgress(1);
+    </script>
+</body>
+</html>

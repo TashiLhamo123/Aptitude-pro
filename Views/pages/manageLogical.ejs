@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Logical Questions</title>
+  <link rel="stylesheet" href="/styles/admin.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h2>Manage Logical Reasoning</h2>
+      <a href="/admin/dashboard" class="back-link">← Back to Dashboard</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h3>Create New Question</h3>
+      <form action="/admin/logical/create" method="POST">
+        <label>Question:</label>
+        <textarea name="question" required></textarea>
+
+        <label>Options:</label>
+        <input type="text" name="optionA" placeholder="Option A" required />
+        <input type="text" name="optionB" placeholder="Option B" required />
+        <input type="text" name="optionC" placeholder="Option C" required />
+        <input type="text" name="optionD" placeholder="Option D" required />
+
+        <label>Correct Answer (A/B/C/D):</label>
+        <input type="text" name="correctAnswer" required />
+
+        <button type="submit">Create Question</button>
+      </form>
+    </section>
+
+    <section class="question-list">
+      <h3>Existing Questions</h3>
+      <% if (questions.length === 0) { %>
+        <p>No questions added yet.</p>
+      <% } else { %>
+        <ul>
+          <% questions.forEach(q => { %>
+            <li>
+              <strong><%= q.question %></strong>
+              <ul>
+                <li>A: <%= q.optionA %></li>
+                <li>B: <%= q.optionB %></li>
+                <li>C: <%= q.optionC %></li>
+                <li>D: <%= q.optionD %></li>
+              </ul>
+              <p>Correct Answer: <%= q.correctAnswer %></p>
+              <a href="/admin/logical/edit/<%= q._id %>">Edit</a>
+              <form action="/admin/logical/delete/<%= q._id %>" method="POST" style="display:inline;">
+                <button type="submit">Delete</button>
+              </form>
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 AptitudePro. All rights reserved.</p>
+  </footer>
+</body>
+</html>
+

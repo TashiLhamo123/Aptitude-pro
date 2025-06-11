@@ -1,0 +1,28 @@
+{
+  "name": "aptitude-pro",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-flash": "^0.1.1",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "nodemon": "^3.1.10",
+    "pg-promise": "^11.13.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TashiLhamo123/Aptitude-pro.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TashiLhamo123/Aptitude-pro/issues"
+  },
+  "homepage": "https://github.com/TashiLhamo123/Aptitude-pro#readme",
+  "description": ""
+}
