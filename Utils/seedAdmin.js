@@ -28,7 +28,8 @@ async function seedAdmin() {
         'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4)',
         [name, email, hashedPassword, role]
       );
-      console.log('✅ Default admin created');
+      // console.log('✅ Default admin created');
+      console.log('ℹ️ Admin already exists');
     } else {
       console.log('ℹ️ Admin already exists');
     }

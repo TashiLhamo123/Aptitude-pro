@@ -16,6 +16,9 @@ router.post('/login', authController.postLogin);
 // Logout
 router.get('/logout', authController.logout);
 
+// Email verification
+router.get('/verify-email/:token', authController.verifyEmail);
+
 // Home (protected)
 router.get('/home', authController.ensureAuth, authController.getHome);
 
