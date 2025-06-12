@@ -130,8 +130,12 @@
     <div class="container">
         <h1>Login</h1>
 
+        <% if (successMessage) { %>
+        <div class="message" style="color: green;"><%= successMessage %></div>
+        <% } %>
+
         <% if (message) { %>
-        <div class="message"><%= message %></div>
+        <div class="message" style="color: red;"><%= message %></div>
         <% } %>
 
         <form action="/login" method="POST">

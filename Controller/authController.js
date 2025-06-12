@@ -13,29 +13,57 @@ exports.getSignup = (req, res) => {
 
 // Signup Form Submission (POST)
 exports.postSignup = async (req, res) => {
+  console.log('Signup attempt:', req.body);
   const { name, email, password } = req.body;
 
-  try {
-    const existing = await db.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
-    if (existing) return res.render('signup', { message: 'Email already exists.' });
+  // Input validation
+  if (!name || !email || !password) {
+    console.log('Missing required fields');
+    return res.render('signup', { message: 'All fields are required.' });
+  }
 
+  if (password.length < 6) {
+    console.log('Password too short');
+    return res.render('signup', { message: 'Password must be at least 6 characters long.' });
+  }
+
+  try {
+    // Check if email already exists
+    const existing = await db.oneOrNone('SELECT * FROM users WHERE email = $1', [email]);
+    if (existing) {
+      console.log('Email already exists:', email);
+      return res.render('signup', { message: 'Email already exists.' });
+    }
+
+    // Hash password and create user
     const hashed = await bcrypt.hash(password, 10);
-    await db.none('INSERT INTO users(name, email, password) VALUES($1, $2, $3)', [name, email, hashed]);
+    console.log('Creating new user:', { name, email });
+    
+    await db.none('INSERT INTO users(name, email, password, role) VALUES($1, $2, $3, $4)', [name, email, hashed, 'user']);
+    console.log('User created successfully');
 
     // Store success message in session and redirect to login
     req.session.successMessage = 'Signup successful! Please log in.';
-    res.redirect('/login');
+    console.log('Redirecting to login page');
+    return res.redirect('/login');
   } catch (err) {
     console.error('Signup error:', err);
-    res.render('signup', { message: 'Something went wrong. Please try again.' });
+    return res.render('signup', { 
+      message: 'An error occurred during signup. Please try again.',
+      name: name, // Preserve the name in case of error
+      email: email // Preserve the email in case of error
+    });
   }
 };
 
 // Login Page (GET)
 exports.login = (req, res) => {
   const successMessage = req.session.successMessage;
+  const message = req.session.errorMessage;
+  // Clear the messages from session
   delete req.session.successMessage;
-  res.render('login', { message: '', successMessage });
+  delete req.session.errorMessage;
+  res.render('login', { message, successMessage });
 };
 
 // Login Form Submission (POST)

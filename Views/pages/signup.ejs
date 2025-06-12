@@ -120,7 +120,14 @@
 <body>
     <div class="container">
         <h1>Create an Account</h1>
-        <form action="/signup" method="POST">
+        
+        <% if (message) { %>
+        <div class="message" style="color: red; margin-bottom: 20px; text-align: center;">
+            <%= message %>
+        </div>
+        <% } %>
+
+        <form action="/signup" method="POST" onsubmit="return validateForm()">
             <div class="input-group">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" required placeholder="Enter your full name">
@@ -133,7 +140,7 @@
 
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required placeholder="Choose a password">
+                <input type="password" id="password" name="password" required placeholder="Choose a password" minlength="6">
             </div>
             <button type="submit">Sign Up</button>
         </form>
@@ -141,5 +148,25 @@
             <p>Already have an account? <a href="/login">Login here</a></p>
         </div>
     </div>
+
+    <script>
+        function validateForm() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!name || !email || !password) {
+                alert('Please fill in all fields');
+                return false;
+            }
+
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters long');
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </body>
 </html>
